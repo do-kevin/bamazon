@@ -13,7 +13,6 @@ connection.connect(err => {
     if (err) throw err;
     console.log(`\nConnected as id ${connection.threadId}\n`);
     start();
-    connection.end();
 });
 
 function start() {
@@ -24,9 +23,7 @@ function start() {
             console.log(`
 Item ID: ${res[i].item_id}
 Product: ${res[i].product_name}
-Department: ${res[i].department_name}
 Price: $${res[i].price}
-Stock: ${res[i].stock_quantity}
             `);
         }
 
@@ -63,15 +60,12 @@ function buyUnitsOf(k) {
             console.log(`You did not input a number. Please run \'node bamazonCustomer.js\' again`);
         } else if(buy.amount <= k.stock_quantity) {
             var stockLeft = k.stock_quantity -= buy.amount;
-            
-            // Database's table does not update
             var updateData = `UPDATE products SET stock_quantity = ${stockLeft} WHERE item_id = ${k.item_id};`;
-            console.log(updateData);
-            connection.query(`SELECT * FROM products`, updateData, function() {
+            connection.query(updateData, function() {
                 var totalCost = (buy.amount * k.price).toFixed(2);
-                console.log(`You purchased ${buy.amount} unit(s) of \"${k.product_name}\" from ${k.department_name}.\nTotal cost: $${totalCost}`);
-                console.log(k);
+                console.log(`You purchased ${buy.amount} unit(s) of \"${k.product_name},\" which now has ${k.stock_quantity} units left, from ${k.department_name}.\nTotal cost: $${totalCost}`);
             });
         }
+        connection.end();
     });
 };
