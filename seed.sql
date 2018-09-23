@@ -10,8 +10,10 @@ VALUES ("Blade Runner 2049", "Movies, Music & Games", 19.99, 700),
        ("Burley Design Bee Bike Trailer, Yellow", "Sports & Outdoors", 299.00, 50),
        ("American Gods", "Books & Audible", 19.99, 80),
        ("Monstress", "Books & Audible", 9.99, 300),
-       ("Kellogg's Fruit Loops Cereal", "Food and Grocery", 12.82, 5000);
-       
-	
+       ("Kellogg's Fruit Loops Cereal", "Food and Grocery", 12.82, 5000),
+       ("From Hell (Hardcover)", "Books & Audible", 39.99, 5),
+       ("Sennheiser HD 800 Reference Dynamic Headphone", "Electronics", 1099.95, 4),
+       ("Apple MacBook Pro MD102LL/A 13.3\"", "Electronics", 1799.99, 2);
+		
        
 	SELECT * FROM products;

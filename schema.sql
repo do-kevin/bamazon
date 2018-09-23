@@ -12,6 +12,8 @@ CREATE TABLE products (
     stock_quantity SMALLINT
 );
 
-UPDATE products SET stock_quantity = 1 WHERE item_id = 2;
+UPDATE products SET stock_quantity = 200 WHERE item_id = 2;
                
 SELECT * FROM products;
+
+DROP TABLE products;
