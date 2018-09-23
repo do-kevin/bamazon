@@ -1,4 +1,5 @@
 const mysql = require(`mysql`);
+const inquirer = require(`inquirer`);
 
 var connection = mysql.createConnection({
     host: `localhost`,
@@ -16,8 +17,8 @@ connection.connect(err => {
 });
 
 function start() {
-    var display = `SELECT * FROM products;`;
-    connection.query(display, function (err, res) {
+    var data = `SELECT * FROM products`;
+    connection.query(data, function (err, res) {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
             console.log(`
@@ -28,5 +29,29 @@ Price: $${res[i].price}
 Stock: ${res[i].stock_quantity}
             `);
         }
-    });
+
+        inquirer.prompt({
+            name: `askItemId`,
+            type: `list`,
+            message: `Select the ID number of the item you would like to purchase:`,
+            choices: function () {
+                var itemIdArray = [];
+                for (let i = 0; i < res.length; i++) {
+                    itemIdArray.push(`${res[i].item_id}`);
+                }
+                return itemIdArray;
+            }
+        }).then(function(selected) {
+            console.log(selected.askItemId);
+
+
+            // Finds the selected product's place in the array
+            j = Number(selected.askItemId - 1);
+            console.log(typeof j);
+            
+            console.log(res[j]);
+
+        })
+    })
+
 }
