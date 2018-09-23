@@ -31,7 +31,7 @@ Stock: ${res[i].stock_quantity}
         }
 
         inquirer.prompt({
-            name: `askItemId`,
+            name: `ItemId`,
             type: `list`,
             message: `Select the ID number of the item you would like to purchase:`,
             choices: function () {
@@ -42,16 +42,36 @@ Stock: ${res[i].stock_quantity}
                 return itemIdArray;
             }
         }).then(function(selected) {
-            console.log(selected.askItemId);
-
-
             // Finds the selected product's place in the array
-            j = Number(selected.askItemId - 1);
-            console.log(typeof j);
+            j = Number(selected.ItemId - 1);
+            var k = res[j];
+            buyUnitsOf(k);
+
+        });
+    });
+};
+
+function buyUnitsOf(k) {
+    inquirer.prompt({
+        name: `amount`,
+        type: `input`,
+        message: `Price per unit: $${k.price}\n  Type & enter the amount of units you would to buy from this product`
+    }).then(function(buy) {
+        if (buy.amount > k.stock_quantity) {
+            console.log(`Insufficient quantity!`);
+        } else if (buy.amount === "" || isNaN(buy.amount)) {
+            console.log(`You did not input a number. Please run \'node bamazonCustomer.js\' again`);
+        } else if(buy.amount <= k.stock_quantity) {
+            var stockLeft = k.stock_quantity -= buy.amount;
             
-            console.log(res[j]);
-
-        })
-    })
-
-}
+            // Database's table does not update
+            var updateData = `UPDATE products SET stock_quantity = ${stockLeft} WHERE item_id = ${k.item_id};`;
+            console.log(updateData);
+            connection.query(`SELECT * FROM products`, updateData, function() {
+                var totalCost = (buy.amount * k.price).toFixed(2);
+                console.log(`You purchased ${buy.amount} unit(s) of \"${k.product_name}\" from ${k.department_name}.\nTotal cost: $${totalCost}`);
+                console.log(k);
+            });
+        }
+    });
+};
