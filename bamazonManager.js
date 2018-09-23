@@ -25,6 +25,8 @@ function menuOptions() {
         console.log(mode.option);
         if(mode.option === `View Products for Sale`) {
             productsForSale();
+        } else if(mode.option === `View Low Inventory`) {
+            lowInventory();
         }
     });
 }
@@ -42,5 +44,21 @@ Stock: ${show.stock_quantity}
             `);
         })
     });
+    connection.end();
+}
+
+function lowInventory() {
+    var data = `SELECT * FROM products WHERE stock_quantity < 5`
+    connection.query(data, function(err, res) {
+        if (err) throw err;
+        res.forEach(function (show) {
+            console.log(`
+Department: ${show.department_name}
+Item ID: ${show.item_id}
+Product: ${show.product_name}
+Stock: ${show.stock_quantity}
+            `);
+        })
+    })
     connection.end();
 }
