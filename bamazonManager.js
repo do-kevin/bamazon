@@ -43,7 +43,7 @@ function productsForSale() {
             console.log(`
 Item ID: ${show.item_id}
 Product: ${show.product_name}
-Price: $${show.price}
+Price, USD: ${show.price}
 Stock: ${show.stock_quantity}
             `);
         })
@@ -106,5 +106,52 @@ function addInventory() {
 }
 
 function newProduct() {
-    console.log(`WIP`);
+    inquirer.prompt([
+        {
+            name: `productName`,
+            type: `input`,
+            message: `What is the name of the product that you want insert into the database?`
+        },
+        {
+            name: `departmentName`,
+            type: `list`,
+            messages: `From which department is this product sold from?`,
+            choices: [`Books & Audible`, `Movies, Music & Games`, `Electronics, Computers & Office`, `Home, Garden, Pets & Tools`, `Food & Grocery`, `Beauty & Health`, `Toys, Kids & Baby`, `Clothing, Shoes & Jewelry`, `Handmade`, `Sports & Outdoors`, `Automotive & Industrial`]
+        },
+        {
+            name: `price`,
+            type: `input`,
+            message: `How much will this product cost?`,
+            validate: function(value) {
+                var pass = value.match(/^(?!^0\.00$)(([1-9][\d]{0,6})|([0]))\.[\d]{2}$/);
+                if(pass) {
+                    return true;
+                }
+                return `Excluding $, please enter a valid price.`;
+            }
+        },
+        {
+            name: `stockQuantity`,
+            type: `input`,
+            message: `Enter the product's unit amount:`,
+            validate: function(value) {
+                var pass = value.match(/^\+?(0|[1-9]\d*)$/);
+                if(pass) {
+                    return true;
+                }
+                return `Enter the amount as a valid integer`;
+            }
+        }
+    ]).then(function(newItem) {
+        var updateData = `INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ("${newItem.productName}", "${newItem.departmentName}", ${newItem.price}, ${newItem.stockQuantity})`
+        connection.query(updateData, function() {
+            console.log(`
+Product Name: ${newItem.productName}
+Department: ${newItem.departmentName}
+Price, USD: ${newItem.price}
+Stock Quantity: ${newItem.stockQuantity}
+            `);
+        });
+        connection.end();
+    });
 }
