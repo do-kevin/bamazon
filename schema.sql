@@ -8,11 +8,12 @@ CREATE TABLE products (
 	item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(100) NOT NULL,
     department_name VARCHAR(100)  NOT NULL,
-    price DECIMAL(8, 2) NULL,
-    stock_quantity SMALLINT
+    price DECIMAL(25, 2) NOT NULL,
+    stock_quantity SMALLINT NOT NULL,
+    product_sales DECIMAL(8, 2) NOT NULL
 );
 
-UPDATE products SET stock_quantity = 200 WHERE item_id = 2;
+UPDATE products SET stock_quantity = 200 + 2 WHERE item_id = 2;
                
 SELECT * FROM products;
 
@@ -23,4 +24,6 @@ CREATE TABLE departments (
     department_name VARCHAR(100) NOT NULL,
     over_head_costs INTEGER NOT NULL
 );
+
+DROP TABLE departments;
 
