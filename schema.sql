@@ -27,3 +27,7 @@ CREATE TABLE departments (
 
 DROP TABLE departments;
 
+SELECT DISTINCT departments.department_id, departments.department_name, departments.over_head_costs, products.product_sales 
+FROM departments INNER JOIN products ON (departments.department_name = products.department_name)  
+WHERE (departments.department_name = products.department_name) ORDER BY department_id ASC;
+
