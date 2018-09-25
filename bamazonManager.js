@@ -143,7 +143,7 @@ function newProduct() {
             }
         }
     ]).then(function(newItem) {
-        var updateData = `INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ("${newItem.productName}", "${newItem.departmentName}", ${newItem.price}, ${newItem.stockQuantity})`
+        var updateData = `INSERT INTO products (product_name, department_name, price, stock_quantity, product_sales) VALUES ("${newItem.productName}", "${newItem.departmentName}", ${newItem.price}, ${newItem.stockQuantity}, 0)`
         connection.query(updateData, function() {
             console.log(`
 Product Name: ${newItem.productName}

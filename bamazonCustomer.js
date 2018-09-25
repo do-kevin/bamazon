@@ -61,10 +61,12 @@ function buyUnitsOf(k) {
         } else if(buy.amount <= k.stock_quantity) {
             var stockLeft = k.stock_quantity -= buy.amount;
             var updateData = `UPDATE products SET stock_quantity = ${stockLeft} WHERE item_id = ${k.item_id};`;
+            var totalCost = (buy.amount * k.price).toFixed(2);
             connection.query(updateData, function() {
-                var totalCost = (buy.amount * k.price).toFixed(2);
                 console.log(`You purchased ${buy.amount} unit(s) of \"${k.product_name},\" which now has ${k.stock_quantity} units left, from ${k.department_name}.\nTotal cost: $${totalCost}`);
             });
+            var updateProductSales = `UPDATE products SET product_sales = product_sales + ${totalCost} WHERE item_id = ${k.item_id};`;
+            connection.query(updateProductSales, function() { });
         }
         connection.end();
     });
